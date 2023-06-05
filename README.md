@@ -8,4 +8,4 @@ DOI: 10.1016/j.cell.2020.10.037
 
 The method for conversion to pathway scores was conducted using the sspa package, developed by Wieder et al.: <br/>
 Single sample pathway analysis in metabolomics: performance evaluation and application (Wieder et al., 2022) 
-DOI: https://doi.org/10.1186/s12859-022-05005-1
+DOI: 10.1186/s12859-022-05005-1
