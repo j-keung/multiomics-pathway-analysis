@@ -5,7 +5,7 @@ import sspa
 import scipy
 import numpy as np 
 import random
-import csv  #to save output as csv file
+import pickle
 import sys #to get the array job number when running an array job with the HPC
 
 
@@ -32,7 +32,7 @@ root_pathway_names = list(root_pathway_dict.keys())
 
 sample_names = list(df.index)
 random.shuffle(sample_names)
-print(sample_names)
+#print(sample_names)
 
 #Make a copy of the original dataframe but replace with the shuffled labels
 df_shuffled = df.copy()
@@ -88,16 +88,7 @@ output = absolute_val(spearman_mild,spearman_severe,edgelist)
 
 
 
-index_num = sys.getenv("PBS_ARRAY_INDEX")  #this should return the array number within the array job
+index_num = sys.argv[1]  #this should return the array number within the array job
 
-# open the file in the write mode
-f = open('Data/permutation/csv_file' + index_num, 'w')
-
-# create the csv writer
-writer = csv.writer(f)
-
-# write a row to the csv file
-writer.writerow(output)
-
-# close the file
-f.close()
+with open('Results/Run'+index_num + '.txt', "wb") as file_output:  
+       pickle.dump(output,file_output)
