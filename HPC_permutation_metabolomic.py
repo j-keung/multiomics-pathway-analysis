@@ -62,20 +62,20 @@ def squared_spearman_corr(data):
 
 
 
-#Function to calculate the absolute difference between two matrices and then determine the mean for each edge
+#Function to calculate the difference between two matrices and then determine the mean for each edge
 
-def absolute_val(data1,data2,edgelist):
-    delta_rsquared = np.absolute(np.array(data1) - np.array(data2))
+def delta_squared_list(data1,data2,edgelist):
+    delta_squared = (np.array(data1) - np.array(data2))
 
     #Mask the upper half of the dataframe (so I don't view the comparisons between the two same genes, and also the duplicate comparisons are removed)
-    mask = delta_rsquared.copy()
+    mask = delta_squared.copy()
     mask = np.triu(np.ones(mask.shape)).astype(bool)
     mask = np.invert(mask) #invert true and false values so the diagonal is False as well
-    non_dup_delta_rsquared = pd.DataFrame(delta_rsquared, columns = edgelist, index = edgelist)
-    non_dup_delta_rsquared = pd.DataFrame(non_dup_delta_rsquared).where(mask) #Replace all false values with NaN using mask
+    non_dup_delta_squared = pd.DataFrame(delta_squared, columns = edgelist, index = edgelist)
+    non_dup_delta_squared = pd.DataFrame(non_dup_delta_squared).where(mask) #Replace all false values with NaN using mask
 
-    delta_rsquared_list = non_dup_delta_rsquared.stack().reset_index()
-    finallist = list(delta_rsquared_list[0])
+    delta_squared_list = non_dup_delta_squared.stack().reset_index()
+    finallist = list(delta_squared_list[0])
 
     return(finallist)
 
@@ -84,7 +84,7 @@ def absolute_val(data1,data2,edgelist):
 spearman_mild,edgelist = squared_spearman_corr(df_mild)
 spearman_severe,edgelist = squared_spearman_corr(df_severe)
 
-output = absolute_val(spearman_mild,spearman_severe,edgelist)
+output = delta_squared_list(spearman_mild,spearman_severe,edgelist)
 
 
 
