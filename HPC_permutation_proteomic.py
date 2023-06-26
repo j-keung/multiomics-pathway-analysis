@@ -5,14 +5,13 @@ import sspa
 import scipy
 import numpy as np 
 import random
-import pickle
 import sys #to get the array job number when running an array job with the HPC
 
 
 #Load dataset
-df = pd.read_csv('Data/Su_COVID_metabolomics_processed_ChEBI.csv', index_col=0)
-df.index= df.index.str.rstrip('-BL')
-df2 = pd.read_csv('Data/Su_COVID_proteomics_processed.csv', index_col=0)
+df = pd.read_csv('Data/Su_COVID_proteomics_processed.csv', index_col=0)
+df2= pd.read_csv('Data/Su_COVID_metabolomics_processed_ChEBI.csv', index_col=0)
+df2.index= df2.index.str.rstrip('-BL')
 
 #Obtain common samples and subset accordingly
 intersection = list(set(df.index.tolist()) & set(df2.index.tolist())) #set removes duplicates
@@ -23,7 +22,7 @@ df = df[df.index.isin(intersection)]
 sample_dict = {sample:df["WHO_status"][sample] for sample in df.index}
 
 #Download the reactome pathways
-reactome_pathways = sspa.process_gmt("Data/Reactome_Homo_sapiens_pathways_compounds_R84.gmt")
+reactome_pathways = sspa.process_reactome('Homo sapiens', infile = 'Data/UniProt2Reactome_All_Levels.txt', download_latest = False, filepath = None)
 
 #Download the root pathways
 root_path = pd.read_excel('Data/Root_pathways.xlsx', header=None)
@@ -32,7 +31,6 @@ root_pathway_names = list(root_pathway_dict.keys())
 
 sample_names = list(df.index)
 random.shuffle(sample_names)
-#print(sample_names)
 
 #Make a copy of the original dataframe but replace with the shuffled labels
 df_shuffled = df.copy()
