@@ -5,6 +5,7 @@ import sspa
 import scipy
 import numpy as np 
 import random
+import pickle
 import sys #to get the array job number when running an array job with the HPC
 
 
@@ -88,5 +89,8 @@ output = delta_squared_list(spearman_mild,spearman_severe,edgelist)
 
 index_num = sys.argv[1]  #this should return the array number within the array job
 
-with open ('Results/Run'+index_num+'.txt', 'w') as file:
-     file.write(','.join(str(i) for i in output))
+#with open ('Results/Run'+index_num+'.txt', 'w') as file:
+#     file.write(','.join(str(i) for i in output))
+
+with open('Results/Run'+index_num + '.txt', "wb") as file_output:  
+    pickle.dump(output,file_output)
