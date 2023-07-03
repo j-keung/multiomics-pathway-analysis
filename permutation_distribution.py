@@ -25,7 +25,7 @@ for filename in os.listdir(path):
 num_vals = []  #number of permuted values above the magnitude of the test statistic
 edgelist = df.index
 
-for index,pathway_pair in enumerate(edgelist):   #test all pathways
+for index in range(len(edgelist)):  #test all pathways
     comparison = df.Initial_tstat[index]    #get initial test statistic
     counter = 0
     
