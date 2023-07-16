@@ -1,6 +1,7 @@
 #!/bin/bash
-#PBS -lwalltime=04:00:00 
+#PBS -lwalltime=06:00:00 
 #PBS -lselect=1:ncpus=1:mem=25gb:cpu_type=rome
+#PBS -J 1-12
 #PBS -o /rds/general/user/jmk122/home/MSc/project_2/metabolomics/logs_project2/  
 #PBS -e /rds/general/user/jmk122/home/MSc/project_2/metabolomics/logs_project2/   
 

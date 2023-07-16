@@ -10,8 +10,8 @@ import sys #to get the array job number when running an array job with the HPC
 
 
 #Load dataset
-df = pd.read_csv('Data/Su_COVID_proteomics_processed.csv', index_col=0)
-df2= pd.read_csv('Data/Su_COVID_metabolomics_processed_ChEBI.csv', index_col=0)
+df = pd.read_csv('proteomics/Data/Su_COVID_proteomics_processed.csv', index_col=0)
+df2= pd.read_csv('proteomics/Data/Su_COVID_metabolomics_processed_ChEBI.csv', index_col=0)
 df2.index= df2.index.str.rstrip('-BL')
 
 #Obtain common samples and subset accordingly
@@ -23,10 +23,10 @@ df = df[df.index.isin(intersection)]
 sample_dict = {sample:df["WHO_status"][sample] for sample in df.index}
 
 #Download the reactome pathways
-reactome_pathways = sspa.process_reactome('Homo sapiens', infile = 'Data/UniProt2Reactome_All_Levels.txt', download_latest = False, filepath = None)
+reactome_pathways = sspa.process_reactome('Homo sapiens', infile = 'proteomics/Data/UniProt2Reactome_All_Levels.txt', download_latest = False, filepath = None)
 
 #Download the root pathways
-root_path = pd.read_excel('Data/Root_pathways.xlsx', header=None)
+root_path = pd.read_excel('proteomics/Data/Root_pathways.xlsx', header=None)
 root_pathway_dict = {root_path[0][i]:root_path[1][i] for i in range(0,len(root_path))}
 root_pathway_names = list(root_pathway_dict.keys())
 
@@ -89,8 +89,5 @@ output = delta_squared_list(spearman_mild,spearman_severe,edgelist)
 
 index_num = sys.argv[1]  #this should return the array number within the array job
 
-#with open ('Results/Run'+index_num+'.txt', 'w') as file:
-#     file.write(','.join(str(i) for i in output))
-
-with open('Results/Run'+index_num + '.txt', "wb") as file_output:  
-    pickle.dump(output,file_output)
+with open('proteomics/Results/Run'+index_num+'.txt', "wb") as file:  
+  pickle.dump(output,file)

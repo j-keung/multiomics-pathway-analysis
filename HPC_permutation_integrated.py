@@ -9,26 +9,22 @@ import pickle
 import sys #to get the array job number when running an array job with the HPC
 
 
-#Load dataset
-df = pd.read_csv('metabolomics/Data/Su_COVID_metabolomics_processed_ChEBI.csv', index_col=0)
-df.index= df.index.str.rstrip('-BL')
-df2 = pd.read_csv('metabolomics/Data/Su_COVID_proteomics_processed.csv', index_col=0)
+#Read in dataset
+df = pd.read_csv("integrated/Data/Su_multi_omics_data.csv", index_col=0)
 
-#Obtain common samples and subset accordingly
-intersection = list(set(df.index.tolist()) & set(df2.index.tolist())) #set removes duplicates
-intersection = [sample for sample in intersection if sample.startswith("INCOV")]
-df = df[df.index.isin(intersection)]
+#Read in pathway file
+mo_pathways = pd.read_csv("integrated/Data/Reactome_multi_omics_ChEBI_Uniprot.csv", index_col=0,dtype="str")
+#Dtype warning because in some columns, some values are in string format whereas some are in integer format, that's why I specify dtype="str"
+
+#Download the root pathways
+root_path = pd.read_excel('integrated/Data/Root_pathways.xlsx', header=None)
+root_pathway_dict = {root_path[0][i]:root_path[1][i] for i in range(0,len(root_path))}
+root_pathway_names = list(root_pathway_dict.keys())
+
+
 
 #Make a dictionary with the WHO status for each sample
 sample_dict = {sample:df["WHO_status"][sample] for sample in df.index}
-
-#Download the reactome pathways
-reactome_pathways = sspa.process_gmt("metabolomics/Data/Reactome_Homo_sapiens_pathways_compounds_R84.gmt")
-
-#Download the root pathways
-root_path = pd.read_excel('metabolomics/Data/Root_pathways.xlsx', header=None)
-root_pathway_dict = {root_path[0][i]:root_path[1][i] for i in range(0,len(root_path))}
-root_pathway_names = list(root_pathway_dict.keys())
 
 sample_names = list(df.index)
 random.shuffle(sample_names)
@@ -51,7 +47,7 @@ df_severe = (df_shuffled[(df_shuffled["WHO_status"] == '3-4') | (df_shuffled["WH
 #Function to calculate the squared Spearman correlation matrix 
 
 def squared_spearman_corr(data):
-    kpca_scores = sspa.sspa_kpca(data, reactome_pathways)   
+    kpca_scores = sspa.sspa_kpca(data, mo_pathways)   
     kpca_scores = kpca_scores.drop(columns = list(set(root_pathway_names) & set(kpca_scores.columns))) #using Sara's code to drop root pathways
 
     spearman_results = scipy.stats.spearmanr(kpca_scores)
@@ -90,5 +86,6 @@ output = delta_squared_list(spearman_mild,spearman_severe,edgelist)
 
 index_num = sys.argv[1]  #this should return the array number within the array job
 
-with open ('metabolomics/Results/Run'+index_num+'.txt', 'wb') as file:
-    pickle.dump(output,file)
+with open('integrated/Results/Run'+index_num + '.txt', "wb") as file_output:  
+       pickle.dump(output,file_output)
+

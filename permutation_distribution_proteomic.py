@@ -10,7 +10,7 @@ df = pd.read_csv('proteomics/Data/initial_tstats.csv', index_col=0)
 
 #Get number of array job, which corresponds to one of the folders that contain 10k permutation values
 index_num = sys.argv[1]
-path = os.getcwd() + '/proteomics/Results' + str(index_num)
+path = os.getcwd() + '/proteomics/Results' + str(index_num) 
 
 final_list = []
 
@@ -25,7 +25,7 @@ for filename in os.listdir(path):
 num_vals = []  #number of permuted values above the magnitude of the test statistic
 edgelist = df.index
 
-for index in range(len(edgelist)):  #test all pathways
+for index,pathway_pair in enumerate(edgelist):   #test all pathways
     comparison = df.Initial_tstat[index]    #get initial test statistic
     counter = 0
     
@@ -35,5 +35,5 @@ for index in range(len(edgelist)):  #test all pathways
     num_vals.append(counter)
         
 
-with open ('proteomics/Data/vals'+index_num+'.txt', 'w') as file:
+with open ('proteomics/Data/vals'+str(index_num)+'.txt', 'w') as file:
      file.write(';'.join(str(i) for i in num_vals))
