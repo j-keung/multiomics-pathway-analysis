@@ -1,23 +1,20 @@
 
+import sys
 import pandas as pd
 import os
 import pickle
 
+
 #Download the initial test statistics
 df = pd.read_csv('metabolomics/Data/initial_tstats.csv', index_col=0)
 
-path = os.getcwd() + '/metabolomics/Results_pickled_100k'
+#Get number of array job, which corresponds to one of the folders that contain 10k permutation values
+index_num = sys.argv[1]
+path = os.getcwd() + '/metabolomics/Results' + str(index_num) 
 
 final_list = []
 
-#for filename in os.listdir(path):
-#    file_num = int(filename[3:-4])
-#    if file_num < 10001:
-#        with open(os.path.join(path, filename), 'rb') as file: # open in readonly mode
-#            list1 = pickle.load(file)
-#        final_list.append(list1)
-        
-        
+ 
 for filename in os.listdir(path):
   with open(os.path.join(path, filename), 'rb') as file: # open in readonly mode
     list1 = pickle.load(file)
@@ -39,5 +36,5 @@ for index,pathway_pair in enumerate(edgelist):   #test all pathways
         
 
 
-with open ('metabolomics/Data/vals.txt', 'w') as file:
+with open ('metabolomics/Data/vals'+str(index_num)+'.txt', 'w') as file:
      file.write(';'.join(str(i) for i in num_vals))

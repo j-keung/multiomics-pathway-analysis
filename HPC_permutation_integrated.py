@@ -10,7 +10,7 @@ import sys #to get the array job number when running an array job with the HPC
 
 
 #Read in dataset
-df = pd.read_csv("integrated/Data/Su_multi_omics_data.csv", index_col=0)
+df = pd.read_csv("integrated/Data/Su_integrated_data.csv", index_col=0)
 
 #Read in pathway file
 mo_pathways = pd.read_csv("integrated/Data/Reactome_multi_omics_ChEBI_Uniprot.csv", index_col=0,dtype="str")
@@ -25,10 +25,8 @@ root_pathway_names = list(root_pathway_dict.keys())
 
 #Make a dictionary with the WHO status for each sample
 sample_dict = {sample:df["WHO_status"][sample] for sample in df.index}
-
 sample_names = list(df.index)
 random.shuffle(sample_names)
-#print(sample_names)
 
 #Make a copy of the original dataframe but replace with the shuffled labels
 df_shuffled = df.copy()
