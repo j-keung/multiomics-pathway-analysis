@@ -1,7 +1,6 @@
 #Load libraries 
 
 import pandas as pd
-import sspa
 import scipy
 import numpy as np 
 import random
@@ -10,16 +9,7 @@ import sys #to get the array job number when running an array job with the HPC
 
 
 #Load dataset
-df = pd.read_csv('metabolomics/Data/Su_COVID_metabolomics_processed_commoncases.csv', index_col=0)
-
-#Download the reactome pathways
-reactome_pathways = sspa.process_gmt("metabolomics/Data/Reactome_Homo_sapiens_pathways_compounds_R84.gmt")
-
-#Download the root pathways
-root_path = pd.read_excel('metabolomics/Data/Root_pathways.xlsx', header=None)
-root_pathway_dict = {root_path[0][i]:root_path[1][i] for i in range(0,len(root_path))}
-root_pathway_names = list(root_pathway_dict.keys())
-
+df = pd.read_csv('metabolomics_withoutPA/Data/Su_COVID_metabolomics_processed_commoncases.csv', index_col=0)
 
 
 #Make a dictionary with the WHO status for each sample
@@ -41,16 +31,15 @@ df_severe = (df_shuffled[(df_shuffled["WHO_status"] == '3-4') | (df_shuffled["WH
 
 
 
+
 #Function to calculate the squared Spearman correlation matrix 
 
 def squared_spearman_corr(data):
-    kpca_scores = sspa.sspa_kpca(data, reactome_pathways)   
-    kpca_scores = kpca_scores.drop(columns = list(set(root_pathway_names) & set(kpca_scores.columns))) #using Sara's code to drop root pathways
 
-    spearman_results = scipy.stats.spearmanr(kpca_scores)
+    spearman_results = scipy.stats.spearmanr(data)
     squared_spearman_coef = np.square(spearman_results[0]) #correlation coefficients (spearman_results[1] gives the p-values)
 
-    return squared_spearman_coef,list(kpca_scores.columns)
+    return squared_spearman_coef,list(data.columns)
 
 
 
@@ -84,5 +73,5 @@ output = delta_squared_list(spearman_mild,spearman_severe,edgelist)
 index_num = sys.argv[1]  #this should return the array number within the array job
 folder_num = sys.argv[2]
 
-with open('metabolomics/Results'+folder_num+'/Run'+index_num + '.txt', "wb") as file_output:  
+with open('metabolomics_withoutPA/Results'+folder_num+'/Run'+index_num + '.txt', "wb") as file_output:  
        pickle.dump(output,file_output)
