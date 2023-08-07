@@ -2,9 +2,10 @@
 
 import pandas as pd
 import sspa
+import random
+from sklearn.preprocessing import StandardScaler
 import scipy
 import numpy as np 
-import random
 import pickle
 import sys #to get the array job number when running an array job with the HPC
 
@@ -39,6 +40,11 @@ df_mild = (df_shuffled[df_shuffled["WHO_status"] == '1-2']).iloc[:,:-2] #45 samp
 df_severe = (df_shuffled[(df_shuffled["WHO_status"] == '3-4') | (df_shuffled["WHO_status"] == '5-7')]).iloc[:,:-2] #83 samples
 
 
+#Scale the data
+df_mild = pd.DataFrame(StandardScaler().fit_transform(df_mild),columns=df_mild.columns, index=df_mild.index)
+df_severe = pd.DataFrame(StandardScaler().fit_transform(df_severe),columns=df_severe.columns, index=df_severe.index)
+
+
 
 
 #Function to calculate the squared Spearman correlation matrix 
@@ -55,7 +61,7 @@ def squared_spearman_corr(data):
 
 
 
-#Function to calculate the difference between two matrices and then determine the mean for each edge
+#Function to calculate the difference between two matrices 
 
 def delta_squared_list(data1,data2,edgelist):
     delta_squared = (np.array(data1) - np.array(data2))
