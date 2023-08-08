@@ -29,9 +29,16 @@ for index,pathway_pair in enumerate(edgelist):   #test all pathways
     comparison = df.Initial_tstat[index]    #get initial test statistic
     counter = 0
     
-    for list1 in final_list:  #len(final_list) = number of permutations
-        if abs(list1[index]) >= comparison:   
+    if comparison >= 0:
+      for list1 in final_list:  #len(final_list) = number of permutations
+        if list1[index] >= comparison:   
             counter += 1
+
+    if comparison < 0:
+      for list1 in final_list:  #len(final_list) = number of permutations
+        if list1[index] <= comparison:   
+            counter += 1
+
     num_vals.append(counter)
         
 
