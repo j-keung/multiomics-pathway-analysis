@@ -11,7 +11,7 @@ import sys #to get the array job number when running an array job with the HPC
 
 
 #Load dataset
-df = pd.read_csv('metabolomics_withoutPA/Data/Su_COVID_metabolomics_processed_commoncases.csv', index_col=0)
+df = pd.read_csv('integrated_withoutPA/Data/Su_COVID_integrated_processed_commoncases.csv', index_col=0)
 
 
 
@@ -78,5 +78,5 @@ output = delta_squared_list(spearman_mild,spearman_severe,edgelist)
 index_num = sys.argv[1]  #this should return the array number within the array job
 folder_num = sys.argv[2]
 
-with open('metabolomics_withoutPA/Results'+folder_num+'/Run'+index_num + '.txt', "wb") as file:  
+with open('integrated_withoutPA/Results'+folder_num+'/Run'+index_num + '.txt', "wb") as file:  
        pickle.dump(output,file)
