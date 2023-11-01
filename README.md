@@ -1,10 +1,13 @@
-# Code
 
-This code was written for my second MSc project, under the supervision of Pr. Timothy Ebbels and Cecilia Wieder.
+This repository contains the scripts for a MSc project, undertaken with the supervision of Pr. Timothy Ebbels and Cecilia Wieder.
 
-Converting single omics data into pathway scores facilitates the data integration process for downstream analyses, such as differential network analysis of different disease or treatment groups, and provides a more holistic view of the biological processes underlying disease.
+# Aims
+Converting single omics data into pathway scores facilitates the biological interpretation and data integration process of multi-omics data, allows comparison of different disease or treatment groups, and provides a more holistic view of the biological processes underlying disease. Using single sample pathway analysis, pathway scores for individual samples can be calculated to study inter-pathway associations and construct pathway level networks. This project aimed to assess the effectiveness of a pathway level differential network approach constructed using permutation testing. 
 
-The scripts in this repository analyse the proteomic and metabolomic datasets from a recent paper by Su et al. studying COVID using various omics datasets, which can be accessed at:
+# Methods
+The differential network approach was compared against a ‘naïve difference’ network approach, formed by taking the difference in edges between two condition-specific correlation networks. Using a COVID-19 dataset, differentially abundant pathway associations were identified between groups split into a mild and severe phenotype. 
+
+The scripts in this repository analyse the proteomic and metabolomic datasets from a recent paper by Su et al. studying COVID, which can be accessed at:
 Multi-Omics Resolves a Sharp Disease-State Shift between Mild and Moderate COVID-19 (Su et al., 2020)
 DOI: 10.1016/j.cell.2020.10.037
 
